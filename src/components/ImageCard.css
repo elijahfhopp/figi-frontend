@@ -1,0 +1,8 @@
+.card-img {
+    object-fit: scale-down;
+}
+
+.card-title {
+    font-weight: 800;
+    margin-bottom: .5rem;
+}

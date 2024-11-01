@@ -13,6 +13,7 @@
     "@apollo/client": "^3.11.8",
     "@fontsource/gaegu": "^5.1.0",
     "@fontsource/outfit": "^5.1.0",
+    "@jimp/jpeg": "^0.22.12",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "graphql": "^16.9.0",
