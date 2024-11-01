@@ -66,7 +66,7 @@ function AnnotatedImage({ data }: { data: ImageInfo }
         </div>
     }
 
-    return <Ratio aspectRatio="16x9">
+    return <Ratio aspectRatio="16x9" className="m-2">
         <img
             src={annotateImage(data, image)}
             style={{ objectFit: "scale-down" }} />
@@ -119,15 +119,15 @@ function ImageDetailModal({ imageId }: { imageId: number }) {
         className="modal show"
         style={{ display: 'block', position: 'initial' }}
     >
-        <Modal.Dialog>
+        <Modal.Dialog style={{maxWidth:"75vw"}}>
             <Modal.Header closeButton>
-                <Modal.Title className="h6">
+                <Modal.Title className="h6 text-truncate">
                     {`${image.path}`}
                 </Modal.Title>
             </Modal.Header>
 
             <Modal.Body className="p-0">
-                <div className="d-flex w-100 p-2 border-bottom justify-content-center">
+                <div className="d-flex w-100 px-2 border-bottom justify-content-center">
                     <AnnotatedImage data={data.image}></AnnotatedImage>
                 </div>
 

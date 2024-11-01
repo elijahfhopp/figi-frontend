@@ -1,8 +1,8 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import './App.css';
 import FooterInfo from './components/FooterInfo';
 import TopBar from './components/TopBar';
-import ImageDetailModal from './components/image/ImageDetailModal'
+import ImageTable from './components/image/ImageTable';
 
 function App() {
   return (
@@ -18,7 +18,8 @@ function App() {
               <ImageCard {...{ onClick: (e) => { console.log(e) }, imgPath: "hi", imageSrc: "/image/30", filetype: ".jpeg", size: 1000 }}></ImageCard>
             </Col>
           </Row> */}
-          <ImageDetailModal imageId={15}></ImageDetailModal>
+          {/* <ImageDetailModal imageId={200}></ImageDetailModal> */}
+          <ImageTable></ImageTable>
         </main>
         <footer className='footer position-absolute bottom-0 mb-4'>
           <FooterInfo></FooterInfo>
