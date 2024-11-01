@@ -21,7 +21,7 @@ type Face = {
 async function fetchFaces(imageFile: File, setError: Dispatch<Error>): Promise<Face[]> {
     let data = new FormData()
     data.append("image", imageFile)
-    let response = await fetch("/extract_faces/",
+    let response = await fetch("/api/extract_faces/",
         {
             method: "post",
             body: data
@@ -111,7 +111,7 @@ function FaceSelector({ embedding, setEmbedding }: { embedding: number[], setEmb
                 <em>(.jpeg, *.png)</em>
             </div>
 
-            <Row className="d-flex mt-4 justify-content-center">
+            <Row className="d-flex my-4 justify-content-center">
                 {error && <span className="text-danger">{`${error}`}</span>}
                 {previewImages}
             </Row>

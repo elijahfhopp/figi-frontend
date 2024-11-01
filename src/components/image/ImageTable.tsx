@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
+import { imagePath } from "../imagePath";
 import ImageCard from "./ImageCard";
 import ImageDetailModal from "./ImageDetailModal";
 import { BasicImageInfo, IMAGE_FROM_IDS } from "./graphql";
@@ -29,7 +30,7 @@ function ImageTable({ imageIds }: { imageIds: number[] }) {
         {selectedImageId && <ImageDetailModal show={showModal} setShow={setShowModal} imageId={selectedImageId}></ImageDetailModal>}
         <Row xs="4" className="w-100">
             {images.map((image) => {
-                let imageHref = new URL(`/image/${image.id.toString()}`, import.meta.env.VITE_API_HOST).href;
+                let imageHref = imagePath(image.id)
                 let props = {
                     setSelectedImage: imageSelect,
                     imageSrc: imageHref,
