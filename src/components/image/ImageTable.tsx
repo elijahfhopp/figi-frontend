@@ -29,9 +29,10 @@ function ImageTable({ imageIds }: { imageIds: number[] }) {
         {selectedImageId && <ImageDetailModal show={showModal} setShow={setShowModal} imageId={selectedImageId}></ImageDetailModal>}
         <Row xs="4" className="w-100">
             {images.map((image) => {
+                let imageHref = new URL(`/image/${image.id.toString()}`, import.meta.env.VITE_API_HOST).href;
                 let props = {
                     setSelectedImage: imageSelect,
-                    imageSrc: `image/${image.id}`,
+                    imageSrc: imageHref,
                     image: image
                 }
                 return (<Col key={image.id} xs={4} md={3} className="mb-4">

@@ -99,7 +99,8 @@ function FaceSelector({ embedding, setEmbedding }: { embedding: number[], setEmb
 
     // console.log(loading)
     if (loading) { 
-        previewImages = [<Spinner key={0}></Spinner>] }
+        previewImages = [<Spinner key={0}></Spinner>]
+    }
 
     return (
         <>
@@ -109,8 +110,11 @@ function FaceSelector({ embedding, setEmbedding }: { embedding: number[], setEmb
                 <p>Drop images here or click to select files</p>
                 <em>(.jpeg, *.png)</em>
             </div>
+
+            <Row className="d-flex mt-4 justify-content-center">
             {error && <span className="text-danger">{`${error}`}</span>}
-            <Row className="d-flex mt-4 justify-content-center">{previewImages}</Row>
+                {previewImages}
+            </Row>
         </>
     );
 }
