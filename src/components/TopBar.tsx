@@ -1,8 +1,8 @@
 import "@fontsource/gaegu/latin-700.css"
 import { Col, Row } from 'react-bootstrap'
 import figiLogo from '../assets/figi_face.svg'
-import './TopBar.css'
 import ServerInfo from "./ServerInfo"
+import './TopBar.css'
 
 
 function LogoBar() {

@@ -1,14 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
+const remoteHost = 'http://localhost:8000'
+
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/figi-demo/",
+  base: "/",
   server: {
     proxy: {
-      '/graphql': 'http://localhost:8000',
-      '/image': 'http://localhost:8000',
-      '/extract_faces': 'http://localhost:8000'
+      '/graphql': remoteHost,
+      '/image': remoteHost,
+      '/extract_faces': remoteHost
     },
   },
   plugins: [react()]

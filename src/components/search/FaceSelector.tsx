@@ -1,8 +1,8 @@
 import { Dispatch, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import './FaceSelector.css';
-import FacePreview from "./FacePreview";
 import { Col, Row, Spinner } from "react-bootstrap";
+import { useDropzone } from "react-dropzone";
+import FacePreview from "./FacePreview";
+import './FaceSelector.css';
 
 type FacePreviewProps = {
     imageDataURL: string
@@ -98,7 +98,7 @@ function FaceSelector({ embedding, setEmbedding }: { embedding: number[], setEmb
     });
 
     // console.log(loading)
-    if (loading) { 
+    if (loading) {
         previewImages = [<Spinner key={0}></Spinner>]
     }
 
@@ -112,7 +112,7 @@ function FaceSelector({ embedding, setEmbedding }: { embedding: number[], setEmb
             </div>
 
             <Row className="d-flex mt-4 justify-content-center">
-            {error && <span className="text-danger">{`${error}`}</span>}
+                {error && <span className="text-danger">{`${error}`}</span>}
                 {previewImages}
             </Row>
         </>

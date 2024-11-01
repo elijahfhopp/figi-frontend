@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client/core"
-import { GraphQLSchema } from "graphql"
 
 
 export const IMAGE_SEARCH = gql`

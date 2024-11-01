@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Col, Row, Spinner, Table } from "react-bootstrap";
-import ImageDetailModal from "./ImageDetailModal";
-import ImageCard from "./ImageCard";
-import { BasicImageInfo, IMAGE_FROM_IDS } from "./graphql";
 import { useQuery } from "@apollo/client";
+import { useState } from "react";
+import { Col, Row, Spinner } from "react-bootstrap";
+import ImageCard from "./ImageCard";
+import ImageDetailModal from "./ImageDetailModal";
+import { BasicImageInfo, IMAGE_FROM_IDS } from "./graphql";
 
 function ImageTable({ imageIds }: { imageIds: number[] }) {
     let [showModal, setShowModal] = useState(false);

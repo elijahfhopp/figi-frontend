@@ -1,9 +1,9 @@
+import { filesize } from "filesize"
 import { Dispatch } from "react"
 import { Card, CardBody, CardFooter, Ratio } from "react-bootstrap"
 import './ImageCard.css'
-import { filesize } from "filesize"
 
-function ImageCard({ setSelectedImage, imageSrc, image}:
+function ImageCard({ setSelectedImage, imageSrc, image }:
     {
         setSelectedImage: Dispatch<number>,
         imageSrc: string,
@@ -21,22 +21,22 @@ function ImageCard({ setSelectedImage, imageSrc, image}:
                 onClick={() => {
                     setSelectedImage(image.id)
                 }}
-            style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer" }}
             >
-            <CardBody>
-                <Ratio aspectRatio="1x1">
-                    <img
-                        src={imageSrc}
-                        className="card-img" />
-                </Ratio>
-            </CardBody>
-            <CardFooter>
-                <h6 className="card-title text-truncate">{`${image.path}`}</h6>
-                <span className="text-secondary">{`Filetype: ${image.filetype}`}</span>
-                <br />
-                <span className="text-secondary">{`Size: ${filesize(image.size)}`}</span>
-            </CardFooter>
-        </Card >
+                <CardBody>
+                    <Ratio aspectRatio="1x1">
+                        <img
+                            src={imageSrc}
+                            className="card-img" />
+                    </Ratio>
+                </CardBody>
+                <CardFooter>
+                    <h6 className="card-title text-truncate">{`${image.path}`}</h6>
+                    <span className="text-secondary">{`Filetype: ${image.filetype}`}</span>
+                    <br />
+                    <span className="text-secondary">{`Size: ${filesize(image.size)}`}</span>
+                </CardFooter>
+            </Card >
         </>
     )
 }

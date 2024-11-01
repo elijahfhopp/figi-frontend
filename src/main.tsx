@@ -1,9 +1,9 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import '@fontsource/outfit/latin.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '@fontsource/outfit/latin.css'
 
 const client = new ApolloClient({
   uri: "/graphql",

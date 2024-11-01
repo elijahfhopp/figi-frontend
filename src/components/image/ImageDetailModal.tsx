@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client"
+import { filesize } from "filesize"
 import Konva from "konva"
 import { Dispatch, useEffect, useState } from "react"
 import { Modal, Ratio, Spinner } from "react-bootstrap"
 import { IMAGE_INFO_QUERY, ImageInfo } from './graphql'
-import { filesize } from "filesize"
 
 async function getImage(imageInfo: ImageInfo, setImage: any) {
     fetch(`/image/${imageInfo.id}`,).then(res => {

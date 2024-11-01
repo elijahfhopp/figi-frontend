@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import './App.css';
 import FooterInfo from './components/FooterInfo';
 import TopBar from './components/TopBar';
 import ImageTable from './components/image/ImageTable';
 import SearchBar from './components/search/SearchBar';
-import { useState } from 'react';
 
 function App() {
     let [searchResultIds, setSearchResultIds] = useState([] as number[])

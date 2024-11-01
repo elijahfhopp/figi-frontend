@@ -2,7 +2,6 @@ import { useLazyQuery } from "@apollo/client";
 import { Dispatch, useEffect, useState } from "react";
 import { IMAGE_SEARCH } from "../image/graphql";
 import FaceSelector from "./FaceSelector";
-import { Spinner } from "react-bootstrap";
 
 // Based on https://docs.opencv.org/4.x/d0/dd4/tutorial_dnn_face.html
 const COSINE_SIMILARITY_THRESHOLD = 0.363
@@ -31,7 +30,7 @@ function SearchBar({ searchResultIds, setSearchResultIds }: { searchResultIds: n
         if (!data) return
         let faces = data.searchFaces;
         let ids: number[] = []
-        faces.forEach((face: {id: number}) => {
+        faces.forEach((face: { id: number }) => {
             let id = face.sourceImage.id;
             if (!ids.includes(id)) ids.push(id)
         });
