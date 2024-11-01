@@ -2,7 +2,6 @@ import { Col, Container, Row } from 'react-bootstrap';
 import './App.css';
 import FooterInfo from './components/FooterInfo';
 import TopBar from './components/TopBar';
-import ImageCard from './components/image/ImageCard';
 import ImageDetailModal from './components/image/ImageDetailModal'
 
 function App() {
@@ -19,7 +18,7 @@ function App() {
               <ImageCard {...{ onClick: (e) => { console.log(e) }, imgPath: "hi", imageSrc: "/image/30", filetype: ".jpeg", size: 1000 }}></ImageCard>
             </Col>
           </Row> */}
-          <ImageDetailModal defaultId={30}></ImageDetailModal>
+          <ImageDetailModal imageId={15}></ImageDetailModal>
         </main>
         <footer className='footer position-absolute bottom-0 mb-4'>
           <FooterInfo></FooterInfo>

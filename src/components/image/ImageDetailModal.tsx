@@ -1,34 +1,39 @@
+import { gql, useQuery } from "@apollo/client"
 import Konva from "konva"
 import { useEffect, useState } from "react"
 import { Modal, Ratio, Spinner } from "react-bootstrap"
 
-function AnnotatedImage({ imageInfo, imageBitmap, faces }: {
-    imageInfo: {
-        height: number,
-        width: number
-    },
-    imageBitmap: ImageBitmap,
-    faces:
-    {
-        x: number,
-        y: number,
-        top: number,
-        left: number
-    }[]
-}) {
+async function getImage(imageInfo: ImageInfo, setImage: any) {
+    fetch(`/image/${imageInfo.id}`,).then(res => {
+        return res.blob()
+    }).then(
+        (blob) => {
+            createImageBitmap(blob).then(bitmap => {
+                setImage(bitmap)
+            })
+        }).catch(err => {
+            console.error(err)
+        })
+}
+
+function annotateImage(info: ImageInfo, image: ImageBitmap | null) {
+    if (image == null) {
+        return "";
+    }
     let color = '#7FFF00';
     let stage = new Konva.Stage({
         container: 'canvas-container',
-        width: imageInfo.width,
-        height: imageInfo.height
+        width: image.width,
+        height: image.height
     });
     let layer = new Konva.Layer();
     stage.add(layer);
-    let image = new Konva.Image({ image: imageBitmap });
-    layer.add(image)
+    let drawableImage = new Konva.Image({ image: image });
+    layer.add(drawableImage)
 
-    let strokeWidth = Math.max(2, ((imageInfo.width) / 250))
-    faces.map((f) => {
+    let imageSize = (image.width + image.height) / 2
+    let strokeWidth = Math.max(2, (imageSize / 250))
+    info.faces.map((f) => {
         layer.add(new Konva.Rect({
             height: f.y,
             width: f.x,
@@ -42,67 +47,98 @@ function AnnotatedImage({ imageInfo, imageBitmap, faces }: {
     let annotatedImage = stage.toDataURL();
     stage.destroyChildren();
     stage.destroy();
+    return annotatedImage;
+}
+
+function AnnotatedImage({ data }: { data: ImageInfo }
+) {
+    let [image, setImage] = useState<ImageBitmap | null>(null);
+    // let [info, setInfo] = useState(data)
+    useEffect(() => {
+        getImage(data, setImage)
+    }, [data])
+
+    if (image == null) {
+        return <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ width: 200, height: 200 }}>
+            <Spinner animation="border"></Spinner>
+        </div>
+    }
+
     return <Ratio aspectRatio="16x9">
         <img
-            src={annotatedImage}
+            src={annotateImage(data, image)}
             style={{ objectFit: "scale-down" }} />
     </Ratio>
 }
 
-function imageContent(imageId: number, setContent: any) {
-    fetch(`/image/${imageId}`,).then(res => {
-        return res.blob()
-    }).then(
-        (blob) => {
-            createImageBitmap(blob).then(res => {
-                setContent(AnnotatedImage(
-                    {
-                        imageInfo: { height: 1000, width: 1000 },
-                        imageBitmap: res,
-                        faces: [{
-                            x: 600,
-                            y: 600,
-                            left: 200,
-                            top: 300
-                        }]
-                    }
-                ))
-            })
-        }).catch(err => {
-            setContent(<span className="text-danger">{`${err}`}</span>)
-        })
+let imageInfoQuery = gql`
+query imageInfo($id: Int!){
+    image(id: $id){
+        id
+        path
+        filetype
+        size
+        faces {
+            x
+            y
+            top
+            left
+        }
+    }
+}
+`
+type ImageInfo = {
+    id: number
+    path: string
+    filetype: string
+    size: string
+    faces: {
+        x: number
+        y: number
+        top: number
+        left: number
+        embedding: number[]
+    }[]
 }
 
-function ImageDetailModal({ defaultId }: { defaultId: number }) {
-    let [content, setContent] = useState<JSX.Element | null>(null);
-    let [imageId, setImageId] = useState(defaultId)
-    useEffect(() => {
-        imageContent(imageId, setContent)
-    }, [imageId]);
+function ImageDetailModal({ imageId }: { imageId: number }) {
+    let { loading, error, data } = useQuery(imageInfoQuery, { variables: { id: imageId } })
 
+    if (loading) {
+        return null;
+    }
 
-    // return (<div className="modal show">
-    //     <Modal.Dialog>
-    //         
-    //     </Modal.Dialog>
-    // </div>);
+    if (error) {
+        return `Error: ${error}`
+    }
+
+    let image: ImageInfo = data.image;
     return (<div
         className="modal show"
         style={{ display: 'block', position: 'initial' }}
     >
         <Modal.Dialog>
             <Modal.Header closeButton>
-                <Modal.Title>
-                    patthhhhhh!
+                <Modal.Title className="h6">
+                    {`${image.path}`}
                 </Modal.Title>
             </Modal.Header>
 
-            <Modal.Body>
-                {content == null && <Spinner></Spinner>}
-                {content != null && content}
-            </Modal.Body>
+            <Modal.Body className="p-0">
+                <div className="d-flex w-100 p-2 border-bottom justify-content-center">
+                    <AnnotatedImage data={data.image}></AnnotatedImage>
+                </div>
 
-            <Modal.Footer>FOOOOTBALLLLLLL!</Modal.Footer>
+                <div className="p-4 text-secondary">
+                    <div>{`ID: ${image.id}`}</div>
+                    <div>{`Filetype: ${image.filetype}`}</div>
+                    <div>{`Size: ${image.size}kb`}</div>
+                    <div>{`Number of Faces: ${image.faces.length}`}</div>
+                </div>
+            </Modal.Body>
+            <Modal.Footer hidden></Modal.Footer>
         </Modal.Dialog>
     </div>);
 }
