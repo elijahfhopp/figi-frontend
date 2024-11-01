@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Col, Row, Table } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Col, Row, Spinner, Table } from "react-bootstrap";
 import ImageDetailModal from "./ImageDetailModal";
 import ImageCard from "./ImageCard";
 import { BasicImageInfo, IMAGE_FROM_IDS } from "./graphql";
@@ -10,7 +10,13 @@ function ImageTable({ imageIds }: { imageIds: number[] }) {
     let [selectedImageId, setSelectedImageId] = useState<number | null>(null);
     let { loading, error, data } = useQuery(IMAGE_FROM_IDS, { variables: { ids: imageIds } })
 
-    if (loading) return null;
+    if (loading) {
+        return <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ width: 200, height: 200 }}>
+            <Spinner animation="border"></Spinner>
+        </div>;
+    }
     if (error) return <span className="text-danger">{`${error}`}</span>
 
     let imageSelect = (id: number) => {
@@ -21,7 +27,7 @@ function ImageTable({ imageIds }: { imageIds: number[] }) {
     let images: BasicImageInfo[] = data.images;
     return <>
         {selectedImageId && <ImageDetailModal show={showModal} setShow={setShowModal} imageId={selectedImageId}></ImageDetailModal>}
-        <Row xs="auto">
+        <Row xs="4" className="w-100">
             {images.map((image) => {
                 let props = {
                     setSelectedImage: imageSelect,

@@ -1,4 +1,17 @@
 import { gql } from "@apollo/client/core"
+import { GraphQLSchema } from "graphql"
+
+
+export const IMAGE_SEARCH = gql`
+query faceSearch($embedding: String!, $threshold: Float!, $limit: Int!){
+    searchFaces(search: {embedding: $embedding, threshold: $threshold, limit: $limit}){
+        sourceImage {
+            id
+        }
+    }
+}
+`
+
 
 export const IMAGE_INFO_QUERY = gql`
 query imageInfo($id: Int!){
@@ -10,8 +23,8 @@ query imageInfo($id: Int!){
         faces {
             x
             y
-            top
-            left
+            width
+            height
         }
     }
 }
@@ -35,12 +48,14 @@ export type BasicImageInfo = {
     size: number
 }
 
+export type FaceInfo = {
+    x: number
+    y: number
+    width: number
+    height: number
+    embedding: number[]
+};
+
 export type ImageInfo = BasicImageInfo & {
-    faces: {
-        x: number
-        y: number
-        top: number
-        left: number
-        embedding: number[]
-    }[]
+    faces: FaceInfo[]
 }

@@ -3,6 +3,7 @@ import Konva from "konva"
 import { Dispatch, useEffect, useState } from "react"
 import { Modal, Ratio, Spinner } from "react-bootstrap"
 import { IMAGE_INFO_QUERY, ImageInfo } from './graphql'
+import { filesize } from "filesize"
 
 async function getImage(imageInfo: ImageInfo, setImage: any) {
     fetch(`/image/${imageInfo.id}`,).then(res => {
@@ -23,7 +24,7 @@ function annotateImage(info: ImageInfo, image: ImageBitmap | null) {
     }
     let color = '#7FFF00';
     let stage = new Konva.Stage({
-        container: 'canvas-container',
+        container: 'invisible-canvas',
         width: image.width,
         height: image.height
     });
@@ -36,8 +37,8 @@ function annotateImage(info: ImageInfo, image: ImageBitmap | null) {
     let strokeWidth = Math.max(2, (imageSize / 250))
     info.faces.map((f) => {
         layer.add(new Konva.Rect({
-            height: f.left,
-            width: f.top,
+            height: f.height,
+            width: f.width,
             y: f.y,
             x: f.x,
             fill: 'transparent',
@@ -54,9 +55,15 @@ function annotateImage(info: ImageInfo, image: ImageBitmap | null) {
 function AnnotatedImage({ data }: { data: ImageInfo }
 ) {
     let [image, setImage] = useState<ImageBitmap | null>(null);
-    // let [info, setInfo] = useState(data)
+
+    // Not sure if this cleanup is necessary.
+    let safeSetImage = (newImage: ImageBitmap) => {
+        if (image != null) image.close()
+        setImage(newImage);
+    }
+
     useEffect(() => {
-        getImage(data, setImage)
+        getImage(data, safeSetImage)
     }, [data])
 
     if (image == null) {
@@ -104,7 +111,7 @@ function ImageDetailModal({ show, setShow, imageId }: { show: boolean, setShow: 
             <div className="p-4 text-secondary">
                 <div>{`ID: ${imageInfo.id}`}</div>
                 <div>{`Filetype: ${imageInfo.filetype}`}</div>
-                <div>{`Size: ${Math.floor(imageInfo.size / 1024)}kb`}</div>
+                <div>{`Size: ${filesize(imageInfo.size)}`}</div>
                 <div>{`Number of Faces: ${imageInfo.faces.length}`}</div>
             </div>
         </Modal.Body>

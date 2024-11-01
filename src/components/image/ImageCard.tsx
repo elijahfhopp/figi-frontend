@@ -1,6 +1,7 @@
 import { Dispatch } from "react"
 import { Card, CardBody, CardFooter, Ratio } from "react-bootstrap"
 import './ImageCard.css'
+import { filesize } from "filesize"
 
 function ImageCard({ setSelectedImage, imageSrc, image}:
     {
@@ -33,7 +34,7 @@ function ImageCard({ setSelectedImage, imageSrc, image}:
                 <h6 className="card-title text-truncate">{`${image.path}`}</h6>
                 <span className="text-secondary">{`Filetype: ${image.filetype}`}</span>
                 <br />
-                <span className="text-secondary">{`Size: ${image.size}kb`}</span>
+                <span className="text-secondary">{`Size: ${filesize(image.size)}`}</span>
             </CardFooter>
         </Card >
         </>

@@ -16,6 +16,7 @@
     "@jimp/jpeg": "^0.22.12",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
+    "filesize": "^10.1.6",
     "graphql": "^16.9.0",
     "konva": "^9.3.16",
     "react": "^18.3.1",
