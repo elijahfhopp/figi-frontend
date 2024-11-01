@@ -12,16 +12,10 @@ function App() {
         <header>
           <TopBar></TopBar>
         </header>
-        <main>
-          {/* <Row>
-            <Col xs={6}>
-              <ImageCard {...{ onClick: (e) => { console.log(e) }, imgPath: "hi", imageSrc: "/image/30", filetype: ".jpeg", size: 1000 }}></ImageCard>
-            </Col>
-          </Row> */}
-          {/* <ImageDetailModal imageId={200}></ImageDetailModal> */}
-          <ImageTable></ImageTable>
+        <main style={{minHeight: "100vh"}}>
+          <ImageTable imageIds={[30, 40, 39, 60, 100, 230]}></ImageTable>
         </main>
-        <footer className='footer position-absolute bottom-0 mb-4'>
+        <footer className='footer mb-4'>
           <FooterInfo></FooterInfo>
         </footer>
       </Container>

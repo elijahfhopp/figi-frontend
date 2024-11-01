@@ -2,8 +2,11 @@
     height: 1rem;
     padding-left: .15rem;
     padding-right: .15rem;
-    animation: heart-img-spin 3s linear;
-    animation-iteration-count: 3;
+    animation: heart-img-spin 3s ease-in-out alternate infinite;
+
+    &:hover {
+        animation-play-state: paused;
+    }
 }
 
 @keyframes heart-img-spin {

@@ -1,7 +1,8 @@
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import Konva from "konva"
-import { useEffect, useState } from "react"
+import { Dispatch, useEffect, useState } from "react"
 import { Modal, Ratio, Spinner } from "react-bootstrap"
+import { IMAGE_INFO_QUERY, ImageInfo } from './graphql'
 
 async function getImage(imageInfo: ImageInfo, setImage: any) {
     fetch(`/image/${imageInfo.id}`,).then(res => {
@@ -35,10 +36,10 @@ function annotateImage(info: ImageInfo, image: ImageBitmap | null) {
     let strokeWidth = Math.max(2, (imageSize / 250))
     info.faces.map((f) => {
         layer.add(new Konva.Rect({
-            height: f.y,
-            width: f.x,
-            y: f.top,
-            x: f.left,
+            height: f.left,
+            width: f.top,
+            y: f.y,
+            x: f.x,
             fill: 'transparent',
             stroke: color,
             strokeWidth: strokeWidth
@@ -73,74 +74,43 @@ function AnnotatedImage({ data }: { data: ImageInfo }
     </Ratio>
 }
 
-let imageInfoQuery = gql`
-query imageInfo($id: Int!){
-    image(id: $id){
-        id
-        path
-        filetype
-        size
-        faces {
-            x
-            y
-            top
-            left
-        }
-    }
-}
-`
-type ImageInfo = {
-    id: number
-    path: string
-    filetype: string
-    size: string
-    faces: {
-        x: number
-        y: number
-        top: number
-        left: number
-        embedding: number[]
-    }[]
-}
-
-function ImageDetailModal({ imageId }: { imageId: number }) {
-    let { loading, error, data } = useQuery(imageInfoQuery, { variables: { id: imageId } })
+function ImageDetailModal({ show, setShow, imageId }: { show: boolean, setShow: Dispatch<boolean>, imageId: number }) {
+    let { loading, error, data } = useQuery(IMAGE_INFO_QUERY, { variables: { id: imageId } })
 
     if (loading) {
         return null;
     }
 
     if (error) {
-        return `Error: ${error}`
+        return <div hidden={!show}>{`Error: ${error}`}</div>
     }
 
-    let image: ImageInfo = data.image;
-    return (<div
-        className="modal show"
-        style={{ display: 'block', position: 'initial' }}
-    >
-        <Modal.Dialog style={{maxWidth:"75vw"}}>
-            <Modal.Header closeButton>
-                <Modal.Title className="h6 text-truncate">
-                    {`${image.path}`}
-                </Modal.Title>
-            </Modal.Header>
+    let imageInfo: ImageInfo = data.image;
+    return (<Modal show={show}
+        onHide={() => { setShow(false) }}
+        animation={false}
+        size="xl">
+        <Modal.Header closeButton>
+            <Modal.Title className="h6 text-truncate">
+                {`${imageInfo.path}`}
+            </Modal.Title>
+        </Modal.Header>
 
-            <Modal.Body className="p-0">
-                <div className="d-flex w-100 px-2 border-bottom justify-content-center">
-                    <AnnotatedImage data={data.image}></AnnotatedImage>
-                </div>
+        <Modal.Body className="p-0">
+            <div className="d-flex w-100 px-2 border-bottom justify-content-center">
+                <AnnotatedImage data={imageInfo}></AnnotatedImage>
+            </div>
 
-                <div className="p-4 text-secondary">
-                    <div>{`ID: ${image.id}`}</div>
-                    <div>{`Filetype: ${image.filetype}`}</div>
-                    <div>{`Size: ${image.size}kb`}</div>
-                    <div>{`Number of Faces: ${image.faces.length}`}</div>
-                </div>
-            </Modal.Body>
-            <Modal.Footer hidden></Modal.Footer>
-        </Modal.Dialog>
-    </div>);
+            <div className="p-4 text-secondary">
+                <div>{`ID: ${imageInfo.id}`}</div>
+                <div>{`Filetype: ${imageInfo.filetype}`}</div>
+                <div>{`Size: ${Math.floor(imageInfo.size / 1024)}kb`}</div>
+                <div>{`Number of Faces: ${imageInfo.faces.length}`}</div>
+            </div>
+        </Modal.Body>
+
+        <Modal.Footer hidden></Modal.Footer>
+    </Modal>);
 }
 
 export default ImageDetailModal;
